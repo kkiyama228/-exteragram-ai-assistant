@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "Vadim AI Plugins",
-  "description": "AI assistant plugins for exteraGram",
+  "description": "AI assistant for exteraGram",
   "author": "kkiyama228",
   "homepage": "https://github.com/kkiyama228/-exteragram-ai-assistant",
   "plugins": [
@@ -16,8 +16,8 @@
       "sdk_version": ">=1.4.4.3",
       "category": "integrations",
       "file": "exteragram_ai.plugin",
-      "sha256": "3b5e8c98839601ea460abed71398c11a9a786c7650aecd2b0b427431f04c56d1",
-      "size": 1908
+      "sha256": "bfa29ce31e7a6c95b20dff2983fe0dbf2e22e3905b170c4ade4ea5eca3a598e3",
+      "size": 1840
     }
   ]
 }
