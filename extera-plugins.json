@@ -9,16 +9,16 @@
     {
       "id": "exteragram_ai",
       "name": "AI Assistant",
-      "description": "AI Assistant update hook diagnostic",
+      "description": "Reads incoming messages locally",
       "author": "kkiyama228",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "icon": "exteraPlugins/1",
       "app_version": ">=12.5.1",
       "sdk_version": ">=1.4.4.3",
       "category": "integrations",
       "file": "exteragram_ai.plugin",
-      "sha256": "fad4ab0182b64eb17a53909811c9682cad5f201aaefe7ae28c9604ec7878b9eb",
-      "size": 2557
+      "sha256": "b20807870c05ffde8723083ad174caba17502238cefd3124eb42146cacc993ee",
+      "size": 3708
     }
   ]
 }
