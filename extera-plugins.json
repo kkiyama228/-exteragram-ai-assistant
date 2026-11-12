@@ -17,8 +17,8 @@
       "sdk_version": ">=1.4.4.3",
       "category": "integrations",
       "file": "exteragram_ai.plugin",
-      "sha256": "780b8afb491b7ab0a64f375aed9b59d61d9e6797f89f2e3847898c13bcc9bc20",
-      "size": 2484
+      "sha256": "c094a01898b72ed684b55ea5379f4a94fc07f5dadff758f32574a4173443d1dc",
+      "size": 2664
     }
   ]
 }
