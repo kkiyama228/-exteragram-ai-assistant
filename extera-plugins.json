@@ -1,4 +1,3 @@
-
 {
   "schema": 1,
   "name": "Vadim AI Plugins",
@@ -9,16 +8,16 @@
     {
       "id": "exteragram_ai",
       "name": "AI Assistant",
-      "description": "AI assistant diagnostic plugin",
+      "description": "AI Assistant update hook diagnostic",
       "author": "kkiyama228",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "icon": "exteraPlugins/1",
       "app_version": ">=12.5.1",
       "sdk_version": ">=1.4.4.3",
       "category": "integrations",
       "file": "exteragram_ai.plugin",
-      "sha256": "c094a01898b72ed684b55ea5379f4a94fc07f5dadff758f32574a4173443d1dc",
-      "size": 2664
+      "sha256": "52997c7cef55f10b44ed44e5e7094a06a463f42f5690a479e5cfbab9bfeb4a70",
+      "size": 2583
     }
   ]
 }
