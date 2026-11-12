@@ -11,7 +11,7 @@
       "name": "AI Assistant",
       "description": "AI assistant for preparing message replies",
       "author": "kkiyama228",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "icon": "exteraPlugins/1",
       "app_version": ">=12.5.1",
       "sdk_version": ">=1.4.4.3",
