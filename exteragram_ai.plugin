@@ -5,9 +5,9 @@ from ui.settings import Header, Text, Divider
 
 __id__ = "exteragram_ai"
 __name__ = "AI Assistant"
-__description__ = "AI assistant diagnostic plugin"
+__description__ = "AI Assistant update hook diagnostic"
 __author__ = "kkiyama228"
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 __icon__ = "exteraPlugins/1"
 __app_version__ = ">=12.5.1"
 __sdk_version__ = ">=1.4.4.3"
@@ -17,56 +17,47 @@ __category__ = "integrations"
 class AIAssistantPlugin(BasePlugin):
 
     def on_plugin_load(self):
+        self.add_hook("TL_updateNewMessage")
+
         count = self.get_setting("load_count", 0)
         self.set_setting("load_count", count + 1)
+        self.logger.info("AI Assistant 0.6.0 loaded; TL_updateNewMessage hook registered")
 
-        self.add_hook("TL_updateNewMessage")
-        self.add_hook("TL_updates")
+    def on_update_hook(self, update_name: str, account: int, update: Any) -> HookResult:
+        calls = self.get_setting("update_hook_calls", 0) + 1
+        self.set_setting("update_hook_calls", calls)
 
-        self.logger.info("AI Assistant 0.5.0 loaded")
-
-    def on_update_hook(self, update_name, account, update):
         if update_name == "TL_updateNewMessage":
-            count = self.get_setting("single_update_count", 0)
-            self.set_setting("single_update_count", count + 1)
-
-        return HookResult()
-
-    def on_updates_hook(self, container_name, account, updates):
-        if container_name == "TL_updates":
-            count = self.get_setting("updates_container_count", 0)
-            self.set_setting("updates_container_count", count + 1)
+            messages = self.get_setting("new_message_events", 0) + 1
+            self.set_setting("new_message_events", messages, reload_settings=True)
+            self.logger.info("Received TL_updateNewMessage")
 
         return HookResult()
 
     def reset_counter(self, view):
-        self.set_setting("single_update_count", 0)
-        self.set_setting("updates_container_count", 0)
+        self.set_setting("update_hook_calls", 0)
+        self.set_setting("new_message_events", 0)
         self.set_setting("load_count", 0, reload_settings=True)
 
     def create_settings(self) -> List[Any]:
-        load_count = self.get_setting("load_count", 0)
-        single_count = self.get_setting("single_update_count", 0)
-        container_count = self.get_setting("updates_container_count", 0)
-
         return [
-            Header(text="Диагностика AI Assistant"),
+            Header(text="AI Assistant — диагностика"),
 
             Text(
-                text=f"Запусков плагина: {load_count}",
-                subtext="Количество загрузок плагина",
+                text=f"Запусков плагина: {self.get_setting('load_count', 0)}",
+                subtext="Плагин успешно загружается",
                 icon="msg_info"
             ),
 
             Text(
-                text=f"Отдельные события: {single_count}",
+                text=f"Вызовов обработчика: {self.get_setting('update_hook_calls', 0)}",
+                subtext="События, переданные в on_update_hook",
+                icon="msg_info"
+            ),
+
+            Text(
+                text=f"Новых сообщений: {self.get_setting('new_message_events', 0)}",
                 subtext="TL_updateNewMessage",
-                icon="msg_info"
-            ),
-
-            Text(
-                text=f"Контейнеры обновлений: {container_count}",
-                subtext="TL_updates",
                 icon="msg_info"
             ),
 
@@ -74,7 +65,7 @@ class AIAssistantPlugin(BasePlugin):
 
             Text(
                 text="Сбросить счётчики",
-                subtext="Начать диагностику заново",
+                subtext="Обнулить диагностические значения",
                 icon="msg_delete",
                 red=True,
                 on_click=self.reset_counter
