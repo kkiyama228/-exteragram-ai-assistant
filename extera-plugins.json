@@ -1,3 +1,4 @@
+
 {
   "schema": 1,
   "name": "Vadim AI Plugins",
@@ -10,14 +11,14 @@
       "name": "AI Assistant",
       "description": "AI assistant for preparing message replies",
       "author": "kkiyama228",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "icon": "exteraPlugins/1",
       "app_version": ">=12.5.1",
       "sdk_version": ">=1.4.4.3",
       "category": "integrations",
       "file": "exteragram_ai.plugin",
-      "sha256": "bfa29ce31e7a6c95b20dff2983fe0dbf2e22e3905b170c4ade4ea5eca3a598e3",
-      "size": 1840
+      "sha256": "ad615e38bde9c9518d7378f2f254521217e9b931f73e997c950c30935159829b",
+      "size": 2492
     }
   ]
 }
