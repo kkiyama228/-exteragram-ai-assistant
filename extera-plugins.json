@@ -10,14 +10,14 @@
       "name": "AI Assistant",
       "description": "AI assistant for preparing message replies",
       "author": "kkiyama228",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "icon": "exteraPlugins/1",
       "app_version": ">=12.5.1",
       "sdk_version": ">=1.4.4.3",
       "category": "integrations",
       "file": "exteragram_ai.plugin",
-      "sha256": "34a8e52e075b907345aba8ed168a31b3646ab747b12ef3197aa5fa291442e700",
-      "size": 755
+      "sha256": "3b5e8c98839601ea460abed71398c11a9a786c7650aecd2b0b427431f04c56d1",
+      "size": 1908
     }
   ]
 }
