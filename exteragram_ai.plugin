@@ -1,3 +1,4 @@
+
 from typing import Any, List
 
 from base_plugin import BasePlugin, HookResult
@@ -5,9 +6,9 @@ from ui.settings import Header, Text, Divider
 
 __id__ = "exteragram_ai"
 __name__ = "AI Assistant"
-__description__ = "AI Assistant update hook diagnostic"
+__description__ = "Reads incoming messages locally"
 __author__ = "kkiyama228"
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 __icon__ = "exteraPlugins/1"
 __app_version__ = ">=12.5.1"
 __sdk_version__ = ">=1.4.4.3"
@@ -18,56 +19,81 @@ class AIAssistantPlugin(BasePlugin):
 
     def on_plugin_load(self):
         self.add_hook("TL_updateNewMessage")
+        self.add_hook("TL_updateNewChannelMessage")
 
-        count = self.get_setting("load_count", 0)
-        self.set_setting("load_count", count + 1)
-        self.logger.info("AI Assistant 0.6.0 loaded; TL_updateNewMessage hook registered")
+        count = self.get_setting("load_count", 0) + 1
+        self.set_setting("load_count", count)
+        self.logger.info("AI Assistant 0.7.0 loaded")
 
     def on_update_hook(self, update_name: str, account: int, update: Any) -> HookResult:
         calls = self.get_setting("update_hook_calls", 0) + 1
         self.set_setting("update_hook_calls", calls)
 
-        if update_name == "TL_updateNewMessage":
-            messages = self.get_setting("new_message_events", 0) + 1
-            self.set_setting("new_message_events", messages, reload_settings=True)
-            self.logger.info("Received TL_updateNewMessage")
+        try:
+            message_obj = getattr(update, "message", None)
+            if message_obj is None:
+                return HookResult()
+
+            if bool(getattr(message_obj, "out", False)):
+                return HookResult()
+
+            message_text = getattr(message_obj, "message", None)
+            if not isinstance(message_text, str):
+                message_text = getattr(message_obj, "messageText", None)
+
+            if not isinstance(message_text, str):
+                return HookResult()
+
+            message_text = message_text.strip()
+            if not message_text:
+                return HookResult()
+
+            received = self.get_setting("received_count", 0) + 1
+            self.set_setting("received_count", received)
+            self.set_setting("latest_message", message_text[:1000], reload_settings=True)
+
+        except Exception:
+            self.logger.exception("Failed to read incoming message")
 
         return HookResult()
 
-    def reset_counter(self, view):
-        self.set_setting("update_hook_calls", 0)
-        self.set_setting("new_message_events", 0)
-        self.set_setting("load_count", 0, reload_settings=True)
+    def clear_latest(self, view):
+        self.set_setting("latest_message", "", reload_settings=True)
 
     def create_settings(self) -> List[Any]:
-        return [
-            Header(text="AI Assistant — диагностика"),
+        latest = self.get_setting("latest_message", "")
+        if not latest:
+            latest = "Пока входящих текстовых сообщений нет."
 
+        return [
+            Header(text="AI Assistant — входящие сообщения"),
             Text(
                 text=f"Запусков плагина: {self.get_setting('load_count', 0)}",
                 subtext="Плагин успешно загружается",
                 icon="msg_info"
             ),
-
             Text(
                 text=f"Вызовов обработчика: {self.get_setting('update_hook_calls', 0)}",
-                subtext="События, переданные в on_update_hook",
+                subtext="События, полученные обработчиком",
                 icon="msg_info"
             ),
-
             Text(
-                text=f"Новых сообщений: {self.get_setting('new_message_events', 0)}",
-                subtext="TL_updateNewMessage",
+                text=f"Получено сообщений: {self.get_setting('received_count', 0)}",
+                subtext="Входящие текстовые сообщения",
                 icon="msg_info"
             ),
-
             Divider(),
-
+            Header(text="Последнее входящее сообщение"),
             Text(
-                text="Сбросить счётчики",
-                subtext="Обнулить диагностические значения",
+                text=latest,
+                subtext="Текст хранится локально в настройках плагина",
+                icon="msg_info"
+            ),
+            Text(
+                text="Очистить последнее сообщение",
+                subtext="Удалить сохранённый текст из настроек плагина",
                 icon="msg_delete",
                 red=True,
-                on_click=self.reset_counter
+                on_click=self.clear_latest
             )
         ]
