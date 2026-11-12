@@ -1,10 +1,13 @@
+from typing import Any, List
+
 from base_plugin import BasePlugin, HookResult
+from ui.settings import Header, Text, Divider
 
 __id__ = "exteragram_ai"
 __name__ = "AI Assistant"
 __description__ = "AI assistant for preparing message replies"
 __author__ = "kkiyama228"
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __icon__ = "exteraPlugins/1"
 __app_version__ = ">=12.5.1"
 __sdk_version__ = ">=1.4.4.3"
@@ -12,11 +15,44 @@ __category__ = "integrations"
 
 
 class AIAssistantPlugin(BasePlugin):
+
     def on_plugin_load(self):
         self.add_hook("TL_updateNewMessage")
-        self.logger.info("AI Assistant loaded; incoming-message event hook registered")
+        self.logger.info("AI Assistant loaded")
 
     def on_update_hook(self, update_name, account, update):
         if update_name == "TL_updateNewMessage":
-            self.logger.info("Incoming message event detected (content not recorded)")
+            count = self.get_setting("event_count", 0)
+            self.set_setting("event_count", count + 1)
+            self.logger.info("Incoming message event detected")
+
         return HookResult()
+
+    def reset_counter(self, view):
+        self.set_setting("event_count", 0, reload_settings=True)
+
+    def create_settings(self) -> List[Any]:
+        count = self.get_setting("event_count", 0)
+
+        return [
+            Header(text="Проверка получения сообщений"),
+
+            Text(
+                text=f"Обнаружено событий: {count}",
+                subtext=(
+                    "Количество обнаруженных входящих событий. "
+                    "Текст сообщений не сохраняется."
+                ),
+                icon="msg_info"
+            ),
+
+            Divider(),
+
+            Text(
+                text="Сбросить счётчик",
+                subtext="Начать проверку заново",
+                icon="msg_delete",
+                red=True,
+                on_click=self.reset_counter
+            )
+        ]
