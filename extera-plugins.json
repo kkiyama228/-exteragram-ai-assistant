@@ -9,7 +9,7 @@
     {
       "id": "exteragram_ai",
       "name": "AI Assistant",
-      "description": "AI assistant for preparing message replies",
+      "description": "AI assistant diagnostic plugin",
       "author": "kkiyama228",
       "version": "0.5.0",
       "icon": "exteraPlugins/1",
